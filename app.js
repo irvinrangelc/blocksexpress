@@ -11,6 +11,9 @@ app.use(express.static('public'));
 var blocks = require('./routes/blocks');
 app.use('/blocks', blocks);
 
+var cities = require('./routes/cities');
+app.use('/cities', cities);
+
 // Examples of Redirections
 app.get('/myblocks', function(req, res){
 	res.redirect(301, '/blocks');
