@@ -8,7 +8,6 @@ app.use(logger);
 // Be able to serve all the statics files in public folder
 app.use(express.static('public'));
 
-
 var blocks = require('./routes/blocks');
 app.use('/blocks', blocks);
 
@@ -17,6 +16,8 @@ app.get('/myblocks', function(req, res){
 	res.redirect(301, '/blocks');
 });
 
-app.listen(3000, function () {
-	console.log('Example app listening on port 3000!');
-});
+// We've encapsulated our app in a module, 
+// to execute our app we must write in our console the following
+// ./bin/wwww
+
+module.exports = app;

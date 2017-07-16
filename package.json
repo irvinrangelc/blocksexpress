@@ -1,15 +1,19 @@
 {
-  "name": "RESTful API with Express",
+  "name": "Blocks",
   "version": "1.0.0",
   "description": "A RESTful API built with Node & Expres",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test.js"
   },
   "author": "Irvin Rangel",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2",
+    "supertest": "^3.0.0"
   }
 }
