@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+// forces the use of the native queryString Node library !important
 var bodyParser = require('body-parser');
-// forces the use of the native queryString Node library
 var parseUrlencoded = bodyParser.urlencoded({ extended: false });
 
 var cities = {
@@ -24,8 +24,8 @@ router.route('/')
 		var newCity = request.body;
 		cities[newCity.name] = newCity.description;
 
-		// Response with code 200 and the new city name
-		response.status(200).json(newCity.name);
+		// Response with code 201 (created) and the new city name
+		response.status(201).json(newCity.name);
 	});
 
 //Dynamic Route
