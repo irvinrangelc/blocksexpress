@@ -5,27 +5,57 @@ var router = express.Router();
 var bodyParser = require('body-parser');
 var parseUrlencoded = bodyParser.urlencoded({ extended: false });
 
-var cities = {
+var redis = require('redis');
+var client = redis.createClient();
+
+// Select our database from Redis
+client.select((process.env.NODE_ENV || 'development').length);
+
+// Using static content
+/*var cities = {
 	'New York': 'The City of New York, often called New York City or simply New York, is the most populous city in the United States.',
 	'San Ramon': 'San Ramón es una ciudad del condado de Contra Costa, en el estado de California (Estados Unidos). Según el censo de 2000 tenía una población de 44.722, y en 2005 contaba con 49.999 habitantes.',
-	'Philadelphia': 'Filadelfia es la mayor ciudad del estado de Pensilvania, Estados Unidos. Está ubicada sobre la orilla derecha del río Delaware'
+	'Philadelphia': 'Filadelfia es la mayor ciudad del estado de Pensilvania, Estados Unidos. Está ubicada sobre la orilla derecha del río Delaware',
+	'Chicago': 'Filadelfia es la mayor ciudad del estado de Pensilvania, Estados Unidos. Está ubicada sobre la orilla derecha del río Delaware'
 }
+
+var cities = [];*/
 
 // Static Route
 router.route('/')
-	.get(function(req, res){
-		if(req.query.limit >= 0){
-			res.json(cities.slice(0, req.query.limit));
+	.get(function(request, response){
+		
+		// Reading from static content
+		/*if(request.query.limit >= 0){
+			response.json(cities.slice(0, request.query.limit));
 		}else{
-			res.json(Object.keys(cities));
-		}
+			response.json(Object.keys(cities));
+		}*/
+
+		// Reading from Redis
+		client.hkeys('cities', function(error, names){
+			if(error) throw error;
+			
+			response.json(names);
+		});
+
 	})
 	.post(parseUrlencoded, function(request, response){
 		var newCity = request.body;
-		cities[newCity.name] = newCity.description;
+		/*
+		Saving using static content 
 
+		cities[newCity.name] = newCity.description;
 		// Response with code 201 (created) and the new city name
-		response.status(201).json(newCity.name);
+		response.status(201).json(newCity.name);*/
+	
+		/* Saving using Redis */
+		client.hset('cities', newCity.name, newCity.description, function(error){
+			if(error) throw error;
+			
+			response.status(201).json(newCity.name);
+		});
+
 	});
 
 //Dynamic Route

@@ -1,10 +1,17 @@
 var request = require('supertest');
 var app = require('./app');
 
+// Call and create a Redis client 
+var redis = require('redis');
+var client = redis.createClient();
+
+// Select the test database
+client.select('test'.length);
+client.flushdb();
+
 describe('Request to the root path', function(){
 
 	it('Returns a 200 status code', function(done) {
-		
 		request(app)
 			.get('/')
 			.expect(200, done);
@@ -27,7 +34,6 @@ describe('Request to the root path', function(){
 describe('Listing cities on /cities', function(){
 
 	it('Returns a 200 status code', function(done) {
-		
 		request(app)
 			.get('/cities')
 			.expect(200, done);
@@ -35,7 +41,6 @@ describe('Listing cities on /cities', function(){
 	});
 
 	it('Returns a JSON format', function(done) {
-		
 		request(app)
 			.get('/cities')
 			.expect('Content-Type', 'application/json; charset=utf-8', done);
@@ -45,7 +50,7 @@ describe('Listing cities on /cities', function(){
 	it('Returns initial cities', function(done){
 		request(app)
 			.get('/cities')
-			.expect(JSON.stringify(['New York','San Ramon','Philadelphia']), done);
+			.expect(JSON.stringify([]), done);
 	});
 
 });
@@ -53,11 +58,10 @@ describe('Listing cities on /cities', function(){
 describe('Creating new cities', function(){
 
 	it('Returns a 201 status code', function(done){
-
 		request(app)
 			.post('/cities')
 			.send('name=Springfield&description=Where+the+Simpsons+live')
 			.expect(201, done);
 	});
-	
+
 });
