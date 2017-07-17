@@ -86,12 +86,19 @@ router.route('/:name')
 		}
 	})
 	.delete(function(request, response){
+		client.hdel('cities', request.params.name, function(error){
+			if(error) throw error;
+			response.sendStatus(204);
+		});
+
+		/*
+		Whit static content
 		if(cities[request.cityName]){
 			delete cities[request.cityName];
 			response.sendStatus(200);
 		}else{
 			response.sendStatus(404);
-		}
+		}*/
 	});
 
 
