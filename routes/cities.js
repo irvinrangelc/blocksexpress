@@ -15,10 +15,9 @@ if(process.env.REDISTOGO_URL){
 	client.auth(rtg.auth.split(":")[1]);
 }else{
 	var client = redis.createClient();
+	// Select our database from Redis
+	client.select((process.env.NODE_ENV || 'development').length);
 }
-
-// Select our database from Redis
-client.select((process.env.NODE_ENV || 'development').length);
 
 // Using static content
 /*var cities = {
