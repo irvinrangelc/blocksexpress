@@ -64,6 +64,20 @@ describe('Creating new cities', function(){
 			.expect(201, done);
 	});
 
+	it('Return the city name', function(done){
+		request(app)
+			.post('/cities')
+			.send('name=Springfield&description=Where+the+Simpsons+live')
+			.expect(/Springfield/i, done);
+	});
+
+	it('Validates city name and description', function(done){
+		request(app)
+			.post('/cities')
+			.send('name=&description=')
+			.expect(400, done);
+	});
+
 });
 
 describe('Deleting cities', function(){

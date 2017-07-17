@@ -49,6 +49,12 @@ router.route('/')
 	})
 	.post(parseUrlencoded, function(request, response){
 		var newCity = request.body;
+
+		if(!newCity.name || !newCity.description){
+			response.sendStatus(400);
+			return false;
+		}
+
 		/*
 		Saving using static content 
 
@@ -56,7 +62,7 @@ router.route('/')
 		// Response with code 201 (created) and the new city name
 		response.status(201).json(newCity.name);*/
 	
-		/* Saving using Redis */
+		/* Savin	 using Redis */
 		client.hset('cities', newCity.name, newCity.description, function(error){
 			if(error) throw error;
 			
@@ -86,8 +92,10 @@ router.route('/:name')
 		}
 	})
 	.delete(function(request, response){
+		
 		client.hdel('cities', request.params.name, function(error){
 			if(error) throw error;
+			
 			response.sendStatus(204);
 		});
 

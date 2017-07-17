@@ -21,7 +21,11 @@ $(function(){
 			type: 'POST',
 			url: '/cities',
 			data: cityData
-		}).done(function(cityName){
+		})
+		.error(function(){
+			alert("Invalid Data!");
+		})
+		.success(function(cityName){
 			// Append to city list
 			appendToList([cityName]);
 			form.trigger('reset');
