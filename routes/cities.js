@@ -81,15 +81,19 @@ router.route('/:name')
 		// Call the next function in the stack
 		next();
 	})
-	.get(function(req, res){
+	.get(function(request, response){
 		// request.cityName is coming from the middleware function
-		var description = cities[req.cityName];
+		/*var description = cities[req.cityName];
 	
 		if(!description){
 			res.status(400).json('Not found for ' + req.params.name);
 		}else{
 			res.json(description);
-		}
+		}*/
+
+		client.hget('cities', request.params.name, function(error, description) {
+			response.render('show.ejs', { city: { name: request.params.name, description: description }});
+		});
 	})
 	.delete(function(request, response){
 		
